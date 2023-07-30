@@ -1,5 +1,6 @@
 package connection;
 
+import client.Configuration;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DataBase {
-    public final static String DB_URL = "";
-    public final static String DB_USER = "";
-    public final static String DB_PASSWORD = "";
+    private Configuration configuration;
     private static final Logger LOGGER = LoggerFactory.getLogger(DataBase.class);
     private static DataBase instance;
     private static Connection CONNECTION;
@@ -19,12 +18,12 @@ public class DataBase {
     private DataBase() {
         BasicConfigurator.configure();
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
             LOGGER.error("Don`t have a db driver!", e);
         }
         try {
-            CONNECTION = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            CONNECTION = DriverManager.getConnection(configuration.DB_URL, configuration.DB_USER, configuration.DB_PASSWORD);
             LOGGER.info("Connection is successful");
         } catch (SQLException e) {
             LOGGER.error("Connection problem..", e);
